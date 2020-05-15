@@ -28,6 +28,14 @@ class Rubyfocus::Context < Rubyfocus::RankedItem
     with_descendant_contexts.flat_map { |context| document.tasks.select(context_id: context.id) }
   end
 
+  def tasks
+    @tasks ||= if self.id.nil?
+			[]
+		else
+      document.contexts_tasks.select(context_id: self.id).map(&:task)
+    end
+  end
+
   private
 
   def descendant_contexts

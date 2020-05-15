@@ -12,7 +12,7 @@
 class Rubyfocus::Document
 	include Rubyfocus::Searchable
 	# A number of arrays into which elements may fit
-	attr_reader :contexts, :settings, :folders, :projects, :tasks
+	attr_reader :contexts, :settings, :folders, :projects, :tasks, :contexts_tasks
 
 	# This is the identifier of the current patch level. This also determines
 	# which patches can be applied to the current document.
@@ -26,7 +26,7 @@ class Rubyfocus::Document
 	# * a string
 	# * a fetcher subclass
 	def initialize(doc=nil)
-		%w(contexts settings projects folders tasks).each{ |s| instance_variable_set("@#{s}", Rubyfocus::SearchableArray.new) }
+		%w(contexts settings projects folders tasks contexts_tasks).each{ |s| instance_variable_set("@#{s}", Rubyfocus::SearchableArray.new) }
 
 		if doc
 			if doc.is_a?(String)
@@ -92,7 +92,8 @@ class Rubyfocus::Document
 			Rubyfocus::Context => @contexts,
 			Rubyfocus::Task => @tasks,
 			Rubyfocus::Folder => @folders,
-			Rubyfocus::Setting => @settings
+			Rubyfocus::Setting => @settings,
+			Rubyfocus::ContextsTasks => @contexts_tasks
 		}[obj.class]
 	end
 	private :ivar_for
@@ -197,7 +198,7 @@ class Rubyfocus::Document
 	#-------------------------------------------------------------------------------
 	# Searchable stuff
 	def elements
-		@tasks + @projects + @contexts + @folders + @settings
+		@tasks + @projects + @contexts + @folders + @settings + @contexts_tasks
 	end
 
 	# For Searchable include

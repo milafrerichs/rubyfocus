@@ -329,4 +329,16 @@ describe Rubyfocus::Task do
       expect(p.document).to be_nil
 	  end
 	end
+  context "multiple contexts" do
+    before(:all) do
+      d = Rubyfocus::Document.new
+      @context_tasks = Rubyfocus::ContextsTasks.new(d, xml(file: "contexts-tasks"))
+      @context = Rubyfocus::Context.new(d, xml(file: "context-parent"))
+      @task = Rubyfocus::Task.new(d, xml(file: "task"))
+    end
+	  it "should return a project with all appropriate methods" do
+      expect(@task.contexts.map(&:id)).to eq(["fh-A78PzERu"])
+		  expect(@task.id).to eq("h0-L40WzHLv")
+    end
+  end
 end

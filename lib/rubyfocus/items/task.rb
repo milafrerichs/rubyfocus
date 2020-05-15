@@ -129,6 +129,13 @@ class Rubyfocus::Task < Rubyfocus::RankedItem
 		return (container.order == :sequential && container.next_available_immediate_task != self)
 	end
 
+  def contexts
+    @contexts ||= if self.id.nil?
+			[]
+		else
+      document.contexts_tasks.select(task_id: self.id).map(&:context)
+    end
+  end
 	#---------------------------------------
 	# Conversion methods
 
